@@ -4,28 +4,52 @@
 
 using namespace std;
 
-int main()
-{
-    int numeroConta, tipoConta;
-    string nomeCliente, cpf;
+int validarInput(string input) {
+    int number;
+
+    while (true) {
+        cout << input;
+        cin >> number;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+
+            cout << "ERRO! Digite um numero" << endl;
+        } else {
+            return number;
+        }
+    }
+}
+
+int main() {
+    int numeroConta, tipoConta, controle;
+    string nomeCliente, cpf, cpfControle;
     double saldo;
     bool contaAtiva;
-    int operacao = 0;
 
-    struct Client
-    {
+    struct Client {
         int numeroConta;
         int tipoConta;
         string nomeCliente;
         string cpf;
         double saldo;
         bool contaAtiva;
+        void mostrar() {
+            cout << endl;
+            cout << "Numero da conta: " << numeroConta << endl;
+            cout << "Tipo da conta: " << tipoConta << endl;
+            cout << "Nome do cliente: " << nomeCliente << endl;
+            cout << "CPF: " << cpf << endl;
+            cout << "Saldo: " << saldo << endl;
+            cout << "Status da Conta (0 - Desativado; 1 - Ativado): " << contaAtiva << endl;
+            cout << endl;
+        }
     };
 
     vector<Client> clientes;
 
-    while (true)
-    {
+    while (true) {
         cout << "********************************" << endl;
         cout << "** BANCO INF101 **" << endl;
         cout << "********************************" << endl;
@@ -36,172 +60,109 @@ int main()
         cout << "4 - Alterar tipo da conta" << endl;
         cout << "5 - Ativar/Desativar conta" << endl;
         cout << "6 - Sair" << endl;
-        cin >> operacao;
+        controle = validarInput("Operação: ");
 
-        while (true)
-        {
-            if (cin.fail())
-            {
-                cin.clear();
-                cin.ignore();
+        while (controle > 6 || controle < 1) {
+            controle = validarInput("ERRO! Operação invalida escolha um numero entre 1 e 6: ");
+        }
 
-                continue;
-            }
-
-            if (operacao > 6 || operacao < 1)
-            {
-                cout << "ERRO! Operação invalida escolha um numero entre 1 e 6: ";
-                cin >> operacao;
-                break;
-            }
-
+        if (controle == 6) {
             break;
         }
 
-        if (operacao == 6)
-        {
-            break;
-        }
-
-        switch (operacao)
-        {
+        switch (controle) {
         case 1:
+            contaAtiva = 0;
             cin.ignore();
 
             cout << "Qual o nome do titular da conta? ";
             getline(cin, nomeCliente);
 
-            while (true)
-            {
-                cout << "Qual o número da conta? ";
-                cin >> numeroConta;
+            while (true) {
+                numeroConta = validarInput("Qual o número da conta? ");
 
-                if (cin.fail())
-                {
-                    cin.clear();
-                    cin.ignore();
-
-                    cout << "ERRO! Digite um numero" << endl;
-                    continue;
-                }
-
-                if (numeroConta < 0)
-                {
-                    cout << "ERRO! Número invalido, adicione um numero maior que 0: ";
-                    cin >> numeroConta;
-                    break;
+                while (numeroConta < 0) {
+                    numeroConta = validarInput("ERRO! Número invalido, adicione um numero maior que 0: ");
                 }
 
                 break;
             }
+
+            cin.ignore();
 
             cout << "Qual o CPF do titular? ";
             getline(cin, cpf);
 
-            cin.ignore();
+            while (true) {
+                tipoConta = validarInput("Qual o tipo da conta? ");
 
-            while (true)
-            {
-                cout << "Qual o tipo da conta? ";
-                cin >> tipoConta;
-
-                if (cin.fail())
-                {
-                    cin.clear();
-                    cin.ignore();
-
-                    cout << "ERRO! Digite um numero" << endl;
-                    continue;
-                }
-
-                if (tipoConta < 0)
-                {
-                    cout << "ERRO! Tipo de conta invalido, escolha entre os tipos 1 e 2: ";
-                    cin >> tipoConta;
-                    break;
+                while (tipoConta != 1 && tipoConta != 2) {
+                    tipoConta = validarInput("ERRO! Tipo de conta invalido, escolha entre os tipos 1 e 2: ");
                 }
 
                 break;
             }
 
-            while (true)
-            {
-                cout << "Qual o saldo inicial? ";
-                cin >> saldo;
+            while (true) {
+                saldo = validarInput("Qual o saldo inicial? ");
 
-                if (cin.fail())
-                {
-                    cin.clear();
-                    cin.ignore();
-
-                    cout << "ERRO! Digite um numero" << endl;
-                    continue;
-                }
-
-                if (saldo < 0)
-                {
-                    cout << "ERRO! Saldo invalido, adicione um saldo maior que 0: ";
-                    cin >> saldo;
-                    break;
+                while (saldo < 0) {
+                    saldo = validarInput("ERRO! Saldo invalido, adicione um saldo maior que 0: ");
                 }
 
                 break;
             }
 
-            clientes.push_back({numeroConta, tipoConta, nomeCliente, cpf, saldo, contaAtiva});
+            contaAtiva = 1;
+            clientes.push_back({ numeroConta, tipoConta, nomeCliente, cpf, saldo, contaAtiva });
             break;
 
         case 2:
-            if (!clientes.data())
-            {
+            if (!clientes.data()) {
                 cout << endl;
                 cout << "Sem clientes cadastrados!" << endl;
                 cout << endl;
                 break;
             }
+            while (true) {
 
-            cout << "********************************" << endl;
-            cout << "** BANCO INF101 **" << endl;
-            cout << "**   CLIENTES   **" << endl;
-            cout << "********************************" << endl;
+                cout << "********************************" << endl;
+                cout << "** BANCO INF101 **" << endl;
+                cout << "**   CLIENTES   **" << endl;
+                cout << "********************************" << endl;
 
-            int controle;
+                cout << "1 - Exibir todos os clientes" << endl;
+                cout << "2 - Procurar por um cliente" << endl;
+                cout << "3 - Sair" << endl;
+                controle = validarInput("Operação: ");
 
-            for (int i = 0; i < clientes.size(); i++)
-            {
-                cout << "Cliente " << i + 1 << ": " << clientes[i].nomeCliente << endl;
-                cout << endl;
-            }
+                while (controle < 1 && controle > 2) {
+                    controle = validarInput("ERRO!  Operação invalida, tente 1: ");
+                }
 
-            cout << "1 - Sair" << endl;
-            cout << "Operação: ";
-            cin >> controle;
-
-            while (true)
-            {
-                if (cin.fail())
-                {
-                    cin.clear();
+                if (controle == 1) {
+                    for (int i = 0; i < clientes.size(); i++) {
+                        cout << "Cliente " << i + 1 << ": " << endl;
+                        clientes[i].mostrar();
+                        cout << endl;
+                    }
+                } else if (controle == 2) {
                     cin.ignore();
 
-                    cout << "ERRO! Digite um numero" << endl;
-                    continue;
-                }
+                    cout << "Qual o CPF do titular da conta? ";
+                    getline(cin, cpfControle);
 
-                if (tipoConta != 1)
-                {
-                    cout << "ERRO!  Operação invalida, tente 1";
-                    cin >> operacao;
+                    for (int i = 0; i < clientes.size(); i++) {
+                        if (clientes[i].cpf == cpfControle) {
+                            clientes[i].mostrar();
+                        }
+                    }
+                } else {
                     break;
                 }
-
-                break;
             }
 
-            if (controle == 1)
-            {
-                break;
-            }
+            break;
 
         case 3:
             /* code */
