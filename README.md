@@ -21,7 +21,7 @@ Para executar acesse algum diretorio do sistema linux que o seu usuário tenha p
 3. ./programa
 ```
 
-<b> Nota</b>:  <span>Se mesmo assim você conseguir executar.</span>
+<b> Nota</b>:  <span>Se mesmo assim você não conseguir executar.</span>
 Tente: 
 ```
 1. chmod +x programa
